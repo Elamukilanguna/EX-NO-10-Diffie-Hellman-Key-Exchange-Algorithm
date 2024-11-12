@@ -1,5 +1,5 @@
 # EX-NO-10-Diffie-Hellman-Key-Exchange-Algorithm
-
+## DATE: 10.10.2024
 ## AIM:
 To Implement Diffie Hellman Key Exchange Algorithm 
 
@@ -20,64 +20,48 @@ To Implement Diffie Hellman Key Exchange Algorithm
 
 ## Program:
 ```
-#include <stdio.h>
-#include <math.h>
+def modular_exponentiation(base, exponent, modulus):
+    result = 1
+    while exponent > 0:
+        if (exponent % 2) == 1:
+            result = (result * base) % modulus
+        base = (base * base) % modulus
+        exponent //= 2
+    return result
 
-// Function to calculate (base^exp) % mod using modular exponentiation
-int modExp(int base, int exp, int mod) {
-    int result = 1;
-    base = base % mod;
-    while (exp > 0) {
-        if (exp % 2 == 1) {
-            result = (result * base) % mod;
-        }
-        exp = exp >> 1;
-        base = (base * base) % mod;
-    }
-    return result;
-}
+def diffie_hellman_key_exchange():
+    p = int(input("Enter a prime number (p): "))
+    g = int(input("Enter a base (g): "))
 
-int main() {
-    // Publicly known values
-    int p = 23;  // A large prime number
-    int g = 5;   // A primitive root modulo p
+    print(f"\nPublicly known values:\nPrime (p) = {p}\nBase (g) = {g}")
 
-    // Private keys (chosen secretly by Jack and Rose)
-    int jackPrivateKey, rosePrivateKey;
-    printf("Enter Jack's private key: ");
-    scanf("%d", &jackPrivateKey);
-    printf("Enter Rose's private key: ");
-    scanf("%d", &rosePrivateKey);
+    a = int(input("User A, enter your private key: "))
+    A = modular_exponentiation(g, a, p)  # Compute A = g^a % p
 
-    // Public keys (computed from private keys)
-    int jackPublicKey = modExp(g, jackPrivateKey, p);  // Jack's public key
-    int rosePublicKey = modExp(g, rosePrivateKey, p);  // Rose's public key
+    b = int(input("User B, enter your private key: "))
+    B = modular_exponentiation(g, b, p)  # Compute B = g^b % p
 
-    printf("Jack's Public Key: %d\n", jackPublicKey);
-    printf("Rose's Public Key: %d\n", rosePublicKey);
+    print(f"\nUser A's public key (A): {A}")
+    print(f"User B's public key (B): {B}")
 
-    // Shared secret keys (computed from the other's public key and own private key)
-    int sharedKeyJack = modExp(rosePublicKey, jackPrivateKey, p);  // Jack computes the shared secret key
-    int sharedKeyRose = modExp(jackPublicKey, rosePrivateKey, p);  // Rose computes the shared secret key
+    shared_secret_A = modular_exponentiation(B, a, p)  # (B^a) % p
+    shared_secret_B = modular_exponentiation(A, b, p)  # (A^b) % p
 
-    printf("Shared Secret Key (Jack): %d\n", sharedKeyJack);
-    printf("Shared Secret Key (Rose): %d\n", sharedKeyRose);
+    print(f"\nUser A's computed shared secret: {shared_secret_A}")
+    print(f"User B's computed shared secret: {shared_secret_B}")
 
-    // The shared keys should be the same
-    if (sharedKeyJack == sharedKeyRose) {
-        printf("Key Exchange Successful! Shared Secret Key: %d\n", sharedKeyJack);
-    } else {
-        printf("Key Exchange Failed!\n");
-    }
+    if shared_secret_A == shared_secret_B:
+        print("\nThe shared secret key has been successfully established!")
+    else:
+        print("\nError: The shared secrets do not match.")
 
-    return 0;
-}
+diffie_hellman_key_exchange()
 
 ```
-
 ## Output:
-![alt text](image.png)
 
+![image](https://github.com/user-attachments/assets/d6b6c74d-8240-4cd5-abe3-231d992e84fc)
 
 ## Result:
   The program is executed successfully
+
